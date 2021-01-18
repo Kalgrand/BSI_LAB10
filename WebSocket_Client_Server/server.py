@@ -8,14 +8,13 @@ async def hello(websocket, path):
     name = await websocket.recv()
     print(f"< {name}")
 
-    secret_key = fill_to_block("very secure key", 16)
-    name = fill_to_block(name, 16)
+    secret_key = fill_to_block("abcdabcdabcdabcd", 16)
     decrypted_text = aes_decode(name, secret_key)
 
-    greeting = f"Received message: {name}!"
+    greeting = f"{decrypted_text}"
 
     await websocket.send(greeting)
-    print(f"> {greeting}")
+    print(f"{greeting}")
 
 start_server = websockets.serve(hello, "localhost", 8765)
 
