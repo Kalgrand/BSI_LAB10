@@ -1,10 +1,19 @@
+"""
+Server based on python websockets. It waits for encrypted message from client,
+decrypts it and sends decrypted message back to client.
+
+Autor: Maciej Milewski
+"""
+
+
 import asyncio
 import websockets
 from aes import *
 from utils import *
 
 
-async def hello(websocket, path):
+async def message_handler(websocket, path):
+    """ Waits for encrypted by AES message, decrypts it, sends it back to client"""
     name = await websocket.recv()
     print(f"< {name}")
 
@@ -16,7 +25,7 @@ async def hello(websocket, path):
     await websocket.send(greeting)
     print(f"{greeting}")
 
-start_server = websockets.serve(hello, "localhost", 8765)
+start_server = websockets.serve(message_handler, "localhost", 8765)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
